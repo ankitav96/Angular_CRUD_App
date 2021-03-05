@@ -1,0 +1,218 @@
+<div class="row app-bg">
+  <div class="content">
+    <div class="form-bg">
+      <form [formGroup]="searchForm" novalidate>
+        <div class="row">
+          <div class="form-group col-sm-3">
+            <select class="form-control" formControlName="department" type="text">
+              <option value="" selected>Select department</option>
+              <option value="IT">IT</option>
+              <option value="Agent">Agent</option>
+              <option value="Sales/Ads">Sales/Ads</option>
+            </select>
+          </div>
+          <div class="form-group col-sm-3">
+            <input class="form-control" formControlName="name" placeholder="User name / email">
+          </div>
+          <div class="form-group col-sm-3">
+            <button type="submit" (click)="search(searchForm.value)" *ngIf="!isEdited" class="btn btn-danger">
+              Search
+            </button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+    <div class="table-bg">
+      <div class="icons">
+        <span style="font-size: 18px; cursor: pointer;"><i class="fa fa-plus" (click)="addUser()"></i></span>
+        <span style="margin-left: 20px; font-size: 18px; cursor: pointer;"><i class="fa fa-refresh" (click)="refreshData()"></i></span>
+        <span style="margin-left: 20px; font-size: 18px; cursor: pointer;"><i class="fa fa-trash-o" (click)="deleteUsers()"></i></span>
+      </div>
+
+      <p-table id="userTable" [value]="userData" [(selection)]="selectedUsers" [rowHover]="true">
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 4%">
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th pSortableColumn="name" style="width: 15%">User Name <p-sortIcon field="name"></p-sortIcon>
+            </th>
+            <th pSortableColumn="department" style="width: 12%">Department <p-sortIcon field="department"></p-sortIcon>
+            </th>
+            <th pSortableColumn="email" style="width: 15%">Email <p-sortIcon field="email"></p-sortIcon>
+            </th>
+            <th pSortableColumn="phone">Phone <p-sortIcon field="phone"></p-sortIcon>
+            </th>
+            <th pSortableColumn="gender" style="width: 7%">Gender <p-sortIcon field="gender"></p-sortIcon>
+            </th>
+            <th pSortableColumn="createDate" style="width: 15%">Create Date <p-sortIcon field="createDate"></p-sortIcon>
+            </th>
+            <th pSortableColumn="status" style="width: 9%">Status <p-sortIcon field="status"></p-sortIcon>
+            </th>
+            <th pSortableColumn="action" style="width: 7%">Actions</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-user>
+          <tr class="p-selectable-row">
+            <td>
+              <p-tableCheckbox [value]="user"></p-tableCheckbox>
+            </td>
+            <td>{{user.name}}</td>
+            <td>{{user.department}}</td>
+            <td>{{user.email}}</td>
+            <td>{{user.phone}}</td>
+            <td>{{user.gender}}</td>
+            <td>{{user.createDate}}</td>
+            <td>{{user.status}}</td>
+            <td><span><i class="fa fa-pencil" style="margin-left: 10px;" aria-hidden="true"
+                  (click)="editUser(user)"></i></span>
+              <span><i class="fa fa-trash-o" style="margin-left: 10px;" (click)="deleteUser(user)"></i></span>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="8">No users found.</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>
+<div class="modal" id="myModal" [style.display]="showModal ? 'block' : 'none'">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">User Details:</h4>
+        <button type="button" class="close" data-dismiss="modal" (click)="hide()">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <form [formGroup]="myForm" novalidate>
+          <div class="row">
+            <div class="form-group col-sm-6">
+              <label>Name:</label>
+              <input class="form-control" formControlName="name" type="text">
+              <div
+                *ngIf="myForm.controls['name'].invalid && (myForm.controls['name'].dirty || myForm.controls['name'].touched)"
+                class="error">
+                <div *ngIf="myForm.controls['name'].errors.required">
+                  Name is required.
+                </div>
+              </div>
+            </div>
+            <div class="form-group col-sm-6">
+              <label>Department:</label>
+              <select class="form-control" formControlName="department">
+                <option value="" disabled selected>Select Department</option>
+                <option value="IT">IT</option>
+                <option value="Agent">Agent</option>
+                <option value="Sales/Ads">Sales/Ads</option>
+              </select>
+              <div
+                *ngIf="myForm.controls['department'].invalid && (myForm.controls['department'].dirty || myForm.controls['department'].touched)"
+                class="error">
+                <div *ngIf="myForm.controls['department'].errors.required">
+                  Department is required.
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row" style="margin-top: 10px;">
+            <div class="form-group col-sm-6">
+              <label>Email:</label>
+              <input class="form-control" formControlName="email" type="text">
+              <div
+                *ngIf="myForm.controls['email'].invalid && (myForm.controls['email'].dirty || myForm.controls['email'].touched)"
+                class="error">
+                <div *ngIf="myForm.controls['email'].errors.required">
+                  Email is required.
+                </div>
+                <div *ngIf="myForm.controls['email'].errors.pattern">
+                  Please provide valid Email.
+                </div>
+              </div>
+            </div>
+            <div class="form-group col-sm-6">
+              <label>Phone:</label>
+              <input class="form-control" formControlName="phone" type="email">
+              <div
+                *ngIf="myForm.controls['phone'].invalid && (myForm.controls['phone'].dirty || myForm.controls['phone'].touched)"
+                class="error">
+                <div *ngIf="myForm.controls['phone'].errors.required">
+                  Phone No is required.
+                </div>
+                <div *ngIf="myForm.controls['phone'].errors.pattern">
+                  Please enter only numeric digits.
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row" style="margin-top: 10px;">
+            <div class="form-group col-sm-6">
+              <label>Gender:</label>
+              <select class="form-control" formControlName="gender">
+                <option value="" disabled selected>Select Gender</option>
+                <option>M</option>
+                <option>F</option>
+              </select>
+              <div
+                *ngIf="myForm.controls['gender'].invalid && (myForm.controls['gender'].dirty || myForm.controls['gender'].touched)"
+                class="error">
+                <div *ngIf="myForm.controls['gender'].errors.required">
+                  Gender is required.
+                </div>
+              </div>
+            </div>
+            <div class="form-group col-sm-6">
+              <label>Create Date:</label>
+              <input class="form-control" formControlName="createDate" type="datetime-local">
+              <div
+                *ngIf="myForm.controls['createDate'].invalid && (myForm.controls['createDate'].dirty || myForm.controls['createDate'].touched)"
+                class="error">
+                <div *ngIf="myForm.controls['createDate'].errors.required">
+                  Create Date is required.
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row" style="margin-top: 10px;">
+            <div class="form-group col-sm-6">
+              <label>Status:</label>
+              <select class="form-control" formControlName="status">
+                <option value="" disabled selected>Select Status</option>
+                <option selected>Effective</option>
+                <option>Inactive</option>
+              </select>
+              <div
+                *ngIf="myForm.controls['status'].invalid && (myForm.controls['status'].dirty || myForm.controls['status'].touched)"
+                class="error">
+                <div *ngIf="myForm.controls['status'].errors.required">
+                  Status is required.
+                </div>
+              </div>
+            </div>
+          </div>
+          <button type="submit" (click)="submit(myForm.value)" *ngIf="!isEdited"
+            [disabled]="myForm.pristine || myForm.invalid" class="btn btn-primary submit-btn col-sm-2">
+            SUBMIT
+          </button>
+          <button type="submit" *ngIf="isEdited" [disabled]="myForm.pristine || myForm.invalid"
+            (click)="updateUser(myForm.value)" class="btn btn-primary submit-btn col-sm-2">UPDATE</button>
+        </form>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="hide()">CLOSE</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<router-outlet></router-outlet>

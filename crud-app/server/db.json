@@ -1,0 +1,44 @@
+{
+  "users": [
+    {
+      "name": "Awanish Test",
+      "department": "IT",
+      "email": "demo@demo.com",
+      "phone": "999999",
+      "gender": "M",
+      "createDate": "2021-03-11T23:54",
+      "status": "Effective",
+      "id": 1
+    },
+    {
+      "name": "new user test",
+      "department": "Agent",
+      "email": "fs@gmail.com",
+      "phone": "2222222",
+      "gender": "M",
+      "createDate": "2021-03-10T23:54",
+      "status": "Effective",
+      "id": 2
+    },
+    {
+      "name": "RMS",
+      "department": "Sales/Ads",
+      "email": "rms@gmail.com",
+      "phone": "789456612",
+      "gender": "F",
+      "createDate": "2021-03-18T23:55",
+      "status": "Effective",
+      "id": 3
+    },
+    {
+      "name": "test_user",
+      "department": "IT",
+      "email": "test_user@gmail.com",
+      "phone": "123456789",
+      "gender": "F",
+      "createDate": "2021-03-19T23:56",
+      "status": "Effective",
+      "id": 4
+    }
+  ]
+}
